@@ -2,16 +2,6 @@
 	BotProject - 본 기능 구현
 	TestProject - 봇 프로젝트에 넣기 전 테스트 하는 프로젝트
 
-
-
-bot.function.crawling - 크롤링과 관련된 패키지
-bot.function.sentence - DB와 연동해서 문장 만드는 클래스과 관련된 패키지
-bot.main.comm - sentence 패키지를 이용해서 사용자와 소통하는 클래스와 관련된 패키지
-bot.main.db - DB 클래스와 관련된 패키지
-bot.main.function - 총괄
-
-
-
 	단계
 	
 	사용자가 입력한 값으로 소통하는 구조 ok
@@ -22,4 +12,21 @@ bot.main.function - 총괄
 
 	문장을 만드는 구조
 
-	
+
+
+
+bot.function.crawling - 크롤링과 관련된 패키지
+bot.function.sentence - DB와 연동해서 문장 만드는 클래스과 관련된 패키지
+bot.main.comm - sentence 패키지를 이용해서 사용자와 소통하는 클래스와 관련된 패키지
+bot.main.db - DB 클래스와 관련된 패키지
+bot.main.function - 총괄
+
+
+2020.04.04
+
+JOSAWORD에 조사들 저장함
+WORDSTORAGE에 단어들 저장함
+
+WORDSTORAGE에 있는 단어들을 통해서 크롤링한 후 MAINWORDSTORAGE에 데이터 저장해야함
+
+BotProject에서 크롤링할때 크롤링 메소드에 배열을 매개값으로 넘겨줄것인데 이 때 어떤 배열을 넘겨줄 것인지에 대한 구조 짜야함
