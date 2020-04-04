@@ -1,0 +1,25 @@
+	
+	BotProject - 본 기능 구현
+	TestProject - 봇 프로젝트에 넣기 전 테스트 하는 프로젝트
+
+
+
+bot.function.crawling - 크롤링과 관련된 패키지
+bot.function.sentence - DB와 연동해서 문장 만드는 클래스과 관련된 패키지
+bot.main.comm - sentence 패키지를 이용해서 사용자와 소통하는 클래스와 관련된 패키지
+bot.main.db - DB 클래스와 관련된 패키지
+bot.main.function - 총괄
+
+
+
+	단계
+	
+	사용자가 입력한 값으로 소통하는 구조 ok
+
+	사용자가 입력한 값을 걸러내는 구조 ok
+
+	봇이 스스로 문장을 만들기 위해 데이터 수집하는 구조 ok
+
+	문장을 만드는 구조
+
+	
