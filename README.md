@@ -1,2 +1,1 @@
-# BOT
-봇 만드는거
+Hi!! kiweon
