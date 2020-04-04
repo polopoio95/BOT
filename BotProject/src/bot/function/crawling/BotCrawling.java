@@ -20,6 +20,7 @@ public class BotCrawling {
 	public static String WEB_DRIVER_ID = "webdriver.chrome.driver";
 	public static String WEB_DRIVER_PATH = "C:\\Users\\kiwon\\NewJDK\\Selenium\\chromedriver_win32\\chromedriver.exe";
 
+	//셀레니움 사용할 때 필요한 옵션들
 	public BotCrawling() {
 		super();
 		System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
@@ -30,25 +31,23 @@ public class BotCrawling {
 		driver = new ChromeDriver(options);
 		url = "https://stdict.korean.go.kr/search/searchResult.do";
 
-		// https://stdict.korean.go.kr/main/main.do
-		//셀레니움 사용할 때 필요한 옵션들
+		// https://stdict.korean.go.kr/main/main.do - 원래 메인홈페이지
+		
 	}
 
-	public void study() {
+	public void crawling() {
 
 		try {
-			DBConn dp = new DBConn();
-
-			//MAINWORDSTORAGE에 있는 단어들 배열로 가져오기
-			String[] list = dp.selectdata();
+			DBConn dbconn = new DBConn();
+			//MAINWORDSTORAGE에 있는 단어들 배열로 가져오기 ***** 단어 품사 내용을 담고있는 MAINWORDSTORAGE 테이블에서 리스트를 가져오는게 크롤링의 시작
+			String[] list = dbconn.selectdata();
 			
-
 			driver.get(url);
 
 			// 안 되었던 이유는 element.getText()를 안했고 쓰레드 슬립을 안해서 그랬던 것으로 추정
 			//arrangetext - > 셀레니움을 통해서 크롤링해오는 것
 			//arrangetext 속에 interdata 메소드는 크롤링한것을 DB에 저장해주는 기능
-			arrangetext(list);
+			savetext(list);
 
 		} catch (Exception e) {
 
@@ -63,7 +62,7 @@ public class BotCrawling {
 
 	}
 
-	public void arrangetext(String[] list) throws InterruptedException, ClassNotFoundException, SQLException {
+	public void savetext(String[] list) throws InterruptedException, ClassNotFoundException, SQLException {
 		//셀레니움을 이용해서 해당 페이지의 html를 뽑아온다
 		
 		DBConn dp = new DBConn();

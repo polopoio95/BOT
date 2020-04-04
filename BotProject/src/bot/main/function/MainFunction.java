@@ -30,7 +30,7 @@ public class MainFunction {
 			// 웹 파싱 기능 추가
 			System.out.println("공부하러 갈게요");
 			BotCrawling bs = new BotCrawling();
-			bs.study();
+			bs.crawling();
 
 		} else if (100 < a) {
 			// 향후 기능 추가

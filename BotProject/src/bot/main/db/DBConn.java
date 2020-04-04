@@ -31,7 +31,7 @@ public class DBConn {
 
 	}
 
-	// SELECT문 데이터 가져오기 테이블 : KIWEONTEST
+	// SELECT문 데이터 가져오기 테이블 : MAINWORDSTORAGE
 	public String[] selectdata() throws ClassNotFoundException, SQLException {
 
 		List<String> sarr = new ArrayList<String>();
