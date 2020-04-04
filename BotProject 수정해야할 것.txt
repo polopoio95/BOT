@@ -8,3 +8,7 @@ arrangetext 속에 interdata 메소드는 크롤링한것을 DB에 저장해주�
 Savetext 메소드 캡슐화 하기
 
 BotProject에서 크롤링할때 크롤링 메소드에 배열을 매개값으로 넘겨줄것인데 이 때 어떤 배열을 넘겨줄 것인지에 대한 구조 짜기
+
+INSERT SELECT문에서 SQL도 파라미터로 받아오게 만들것
+
+INSERT SELECT문에서 파라미터를 그냥 STR이 아니라 배열로 받아올 것 - 그래야 반복문 돌릴때 옵션들까지 안돌아감
