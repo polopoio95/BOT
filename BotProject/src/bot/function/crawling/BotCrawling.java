@@ -1,6 +1,8 @@
 package bot.function.crawling;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -10,9 +12,10 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import bot.main.db.DBConn;
+import bot.main.db.InsertDB;
 
 public class BotCrawling {
-	
+
 	private WebDriver driver;
 	private String url;
 	private WebElement element;
@@ -20,34 +23,25 @@ public class BotCrawling {
 	public static String WEB_DRIVER_ID = "webdriver.chrome.driver";
 	public static String WEB_DRIVER_PATH = "C:\\Users\\kiwon\\NewJDK\\Selenium\\chromedriver_win32\\chromedriver.exe";
 
-	//셀레니움 사용할 때 필요한 옵션들
+	// 셀레니움 사용할 때 필요한 옵션들
 	public BotCrawling() {
 		super();
 		System.setProperty(WEB_DRIVER_ID, WEB_DRIVER_PATH);
 		ChromeOptions options = new ChromeOptions();
-		// options.addArguments("headless");
+		options.addArguments("headless");
 		options.setCapability("ignoreProtectedModeSettings", true);
 
 		driver = new ChromeDriver(options);
 		url = "https://stdict.korean.go.kr/search/searchResult.do";
 
-		// https://stdict.korean.go.kr/main/main.do - 원래 메인홈페이지
-		
 	}
 
-	public void crawling() {
+	public void crawling(String[] list, String sql) {
 
 		try {
-			DBConn dbconn = new DBConn();
-			//MAINWORDSTORAGE에 있는 단어들 배열로 가져오기 ***** 단어 품사 내용을 담고있는 MAINWORDSTORAGE 테이블에서 리스트를 가져오는게 크롤링의 시작
-			String[] list = dbconn.selectdata();
-			
 			driver.get(url);
 
-			// 안 되었던 이유는 element.getText()를 안했고 쓰레드 슬립을 안해서 그랬던 것으로 추정
-			//arrangetext - > 셀레니움을 통해서 크롤링해오는 것
-			//arrangetext 속에 interdata 메소드는 크롤링한것을 DB에 저장해주는 기능
-			savetext(list);
+			crawlingWeb(list, sql);
 
 		} catch (Exception e) {
 
@@ -62,47 +56,92 @@ public class BotCrawling {
 
 	}
 
-	public void savetext(String[] list) throws InterruptedException, ClassNotFoundException, SQLException {
-		//셀레니움을 이용해서 해당 페이지의 html를 뽑아온다
-		
-		DBConn dp = new DBConn();
+	public void crawlingWeb(String[] list, String sql)
+			throws InterruptedException, ClassNotFoundException, SQLException {
+		// 셀레니움을 이용해서 해당 페이지의 html를 뽑아온다
 
-		for (int i = 0; i < list.length; i++) {
+		InsertDB dp = new InsertDB(sql);
+		List<String> crawlingword = new ArrayList<String>();
 
-			Thread.sleep(1000);
-			element = driver.findElement(By.id("n_input"));
-			element.clear();
-			element.sendKeys(list[i], Keys.ENTER);
+		if (sql.contains("(?)")) {
 
-			Thread.sleep(1000);
-			//이 웹사이트상의 구조를 내가 원하는 것으로 정리하는거 (81~85)
-			WebElement elements = driver.findElement(By.className("result"));
-			String strm = elements.getText().replaceAll("[123456789]", "");
-			String str = strm.replace("「」", "").replace("」", "「");
-			String[] strcut = str.split("전체 보기");
+			for (int i = 0; i < list.length; i++) {
 
-			System.out.printf("%n   %s에 대한 정보입니다 %n", list[i]);
+				Thread.sleep(1000);
+				element = driver.findElement(By.id("n_input"));
+				element.clear();
+				element.sendKeys(list[i], Keys.ENTER);
 
-			for (int j = 0; j < strcut.length; j++) {
+				Thread.sleep(1000);
+				// 이 웹사이트상의 구조를 내가 원하는 것으로 정리하는거 (69~72)
+				element = driver.findElement(By.className("result"));
+				String strm = element.getText().replaceAll("[123456789]", "");
+				String str = strm.replace("「」", "").replace("」", "「");
+				String[] strcut = str.split("전체 보기");
 
-				// 문자열에서 「을 중심으로 문자열을 자른다
-				String[] sscut = strcut[j].split("「");
+				System.out.printf("%n   %s에 대한 정보입니다 %n", list[i]);
 
-				dp.interdata(sscut[0], sscut[1], sscut[2]);
+				for (int j = 0; j < strcut.length; j++) {
 
-				for (int k = 0; k < sscut.length; k++) {
+					// 문자열에서 「을 중심으로 문자열을 자른다
+					String[] sscut = strcut[j].split("「");
 
-					System.out.println(sscut[k]);
+					crawlingword.add(sscut[0]);
+
+					System.out.println(sscut[0]);
+
+				}
+
+				// System.out.printf("%n %s에 대한 정보입니다 %n " + str, list[i]);
+				// 검색하다 검색결과가 없는 경우를 대비해서 if문 삽입 검색결과가 없는경우 그냥 빠져나가는 예약어 사용
+
+			}
+
+			String[] wordListS = crawlingword.toArray(new String[crawlingword.size()]);
+			dp.insertOne(wordListS);
+
+		} else if (sql.contains("(?,?)")) {
+
+		} else if (sql.contains("(?,?,?)")) {
+
+			for (int i = 0; i < list.length; i++) {
+
+				try {
+
+					Thread.sleep(1000);
+					element = driver.findElement(By.id("n_input"));
+					element.clear();
+					element.sendKeys(list[i], Keys.ENTER);
+
+					Thread.sleep(1000);
+					// 이 웹사이트상의 구조를 내가 원하는 것으로 정리하는거 (69~72)
+					WebElement elements = driver.findElement(By.className("result"));
+					String strm = elements.getText().replaceAll("[123456789]", "");
+					String str = strm.replace("「」", "").replace("」", "「");
+					String[] strcut = str.split("전체 보기");
+
+					System.out.printf("%n   %s에 대한 정보입니다 %n", list[i]);
+
+					for (int j = 0; j < strcut.length; j++) {
+						System.out.println(strcut[j]);
+						crawlingword.add(strcut[j]);
+
+					}
+
+				} catch (Exception e) {
+					System.out.println("\n 검색 결과가 없습니다");
+					continue;
 
 				}
 
 			}
 
-			// System.out.printf("%n %s에 대한 정보입니다 %n " + str, list[i]);
-			// 검색하다 검색결과가 없는 경우를 대비해서 if문 삽입 검색결과가 없는경우 그냥 빠져나가는 예약어 사용
+			String[] wordListS = crawlingword.toArray(new String[crawlingword.size()]);
+			dp.insertThree(wordListS);
 
+		} else {
+			System.out.println("DB 명령문을 다시 한 번 확인해주세요");
 		}
-
 	}
 
 }
