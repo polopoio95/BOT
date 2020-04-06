@@ -112,8 +112,8 @@ public class TestCrawling {
 
 					Thread.sleep(1000);
 					// 이 웹사이트상의 구조를 내가 원하는 것으로 정리하는거 (69~72)
-					WebElement elements = driver.findElement(By.className("result"));
-					String strm = elements.getText().replaceAll("[123456789]", "");
+					element = driver.findElement(By.className("result"));
+					String strm = element.getText().replaceAll("[123456789]", "");
 					String str = strm.replace("「」", "").replace("」", "「");
 					String[] strcut = str.split("전체 보기");
 

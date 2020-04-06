@@ -40,7 +40,8 @@ public class TestInsert {
 
 	}
 	
-	public void insertWordStorage(String[] str) throws ClassNotFoundException, SQLException {
+	//INSERT INTO TABLENAME VALUES(?,?)
+	public void insertTwo(String[] str) throws ClassNotFoundException, SQLException {
 
 		
 		for (int i = 0; i < str.length; i++) {
@@ -58,7 +59,7 @@ public class TestInsert {
 
 	}
 	
-	//INSERT INTO JOSAWORD VALUES(?, ?, ?)
+	//INSERT INTO JOSAWORD VALUES(?,?,?)
 	public void insertthree(String[] wordLists) throws ClassNotFoundException, SQLException {
 
 		for(int i = 0; i < wordLists.length; i++) {
