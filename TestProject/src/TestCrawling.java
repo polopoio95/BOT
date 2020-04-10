@@ -58,9 +58,9 @@ public class TestCrawling {
 		// 셀레니움을 이용해서 해당 페이지의 html를 뽑아온다
 
 		TestInsert dp = new TestInsert(sql);
-		List<String> crawlingword = new ArrayList<String>();
 
 		if (sql.contains("(?)")) {
+			List<String> crawlingword = new ArrayList<String>();
 
 			for (int i = 0; i < list.length; i++) {
 
@@ -71,8 +71,8 @@ public class TestCrawling {
 
 				Thread.sleep(1000);
 				// 이 웹사이트상의 구조를 내가 원하는 것으로 정리하는거 (69~72)
-				WebElement elements = driver.findElement(By.className("result"));
-				String strm = elements.getText().replaceAll("[123456789]", "");
+				element = driver.findElement(By.className("result"));
+				String strm = element.getText().replaceAll("[123456789]", "");
 				String str = strm.replace("「」", "").replace("」", "「");
 				String[] strcut = str.split("전체 보기");
 
@@ -98,8 +98,11 @@ public class TestCrawling {
 			dp.insert(wordListS);
 
 		} else if (sql.contains("(?,?)")) {
+			System.out.println("아직 구현하지 않았습니다");
 
 		} else if (sql.contains("(?,?,?)")) {
+
+			List<String> crawlingword = new ArrayList<String>();
 
 			for (int i = 0; i < list.length; i++) {
 
@@ -115,12 +118,13 @@ public class TestCrawling {
 					element = driver.findElement(By.className("result"));
 					String strm = element.getText().replaceAll("[123456789]", "");
 					String str = strm.replace("「」", "").replace("」", "「");
+
 					String[] strcut = str.split("전체 보기");
 
 					System.out.printf("%n   %s에 대한 정보입니다 %n", list[i]);
 
 					for (int j = 0; j < strcut.length; j++) {
-						System.out.println(strcut[j]);
+
 						crawlingword.add(strcut[j]);
 
 					}
@@ -134,6 +138,8 @@ public class TestCrawling {
 			}
 
 			String[] wordListS = crawlingword.toArray(new String[crawlingword.size()]);
+			System.out.println(wordListS.length);
+			
 			dp.insertthree(wordListS);
 
 		} else {
