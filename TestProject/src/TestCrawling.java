@@ -32,14 +32,37 @@ public class TestCrawling {
 		// https://stdict.korean.go.kr/main/main.do - 원래 메인홈페이지
 
 	}
+	
+	
 
-	public void crawling(String[] list, String sql) {
+	public void crawlingSave(String[] list, String sql) {
 
 		try {
 
 			driver.get(url);
 
-			saveword(list, sql);
+			saveWord(list, sql);
+
+		} catch (Exception e) {
+
+			System.out.println(e);
+
+		} finally {
+			System.out.println("\n");
+			System.out.println("공부 다 했습니다");
+			driver.quit();
+
+		}
+
+	}
+	
+	public void crawlingMatch(String[] list, String sql, String url) {
+
+		try {
+
+			driver.get(url);
+
+			matchWord(list, sql, url);
 
 		} catch (Exception e) {
 
@@ -54,7 +77,7 @@ public class TestCrawling {
 
 	}
 
-	public void saveword(String[] list, String sql) throws InterruptedException, ClassNotFoundException, SQLException {
+	public void saveWord(String[] list, String sql) throws InterruptedException, ClassNotFoundException, SQLException {
 		// 셀레니움을 이용해서 해당 페이지의 html를 뽑아온다
 
 		TestInsert dp = new TestInsert(sql);
@@ -146,6 +169,39 @@ public class TestCrawling {
 			System.out.println("DB 명령문을 다시 한 번 확인해주세요");
 		}
 
+	}
+
+	private void matchWord(String[] wordList, String sql, String url) throws InterruptedException, ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		
+		this.url = url;
+		
+		TestSelect ts = new TestSelect(sql);
+		
+		element = driver.findElement(By.id("container"));
+		String art = element.getText();
+		System.out.println(art);
+		
+		for(int i = 0; i < wordList.length; i++) {
+			String[] word = wordList[i].split("/");
+		
+			if(art.contains(word[0])) {
+				System.out.printf("%s는 담겨져있습니다\n", word[0]);
+				int acc = Integer.parseInt(word[1]) + 1;
+				System.out.println(acc);
+				
+			
+				
+			} else {
+				System.out.printf("%s는 담겨져있지 않습니다\n", word[0]);
+				int acc = Integer.parseInt(word[1]) - 1;
+				System.out.println(acc);
+			}
+			
+			
+		}
+		
+		
 	}
 
 }

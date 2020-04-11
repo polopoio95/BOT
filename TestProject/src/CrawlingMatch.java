@@ -35,7 +35,7 @@ public class CrawlingMatch {
 
 			driver.get(url);
 
-			matchWord();
+			//matchWord();
 
 		} catch (Exception e) {
 
@@ -50,35 +50,6 @@ public class CrawlingMatch {
 
 	}
 
-	//id=articleWrap
-	
-	private void matchWord() throws InterruptedException, ClassNotFoundException, SQLException {
-		// TODO Auto-generated method stub
-		String sql = "SELECT WORD, ACCURACY FROM NOUN";
-		TestSelect ts = new TestSelect(sql);
-		String[] wordList = ts.selectString();
-		
-		
-		Thread.sleep(1000);
-		// 이 웹사이트상의 구조를 내가 원하는 것으로 정리하는거 (69~72)
-		element = driver.findElement(By.id("articleWrap"));
-		String art = element.getText();
-		System.out.println(art);
-		
-		for(int i = 0; i < wordList.length; i++) {
-			
-			if(art.contains(wordList[i])) {
-				System.out.printf("%s는 담겨져있습니다\n", wordList[i]);
-			
-				
-			} else {
-				System.out.printf("%s는 담겨져있지 않습니다\n", wordList[i]);
-			}
-			
-			
-		}
-		
-		
-	}
+
 
 }

@@ -44,7 +44,7 @@ public class TestInsert {
 	public void insertTwoCraw(String[] str) throws ClassNotFoundException, SQLException {
 
 		for (int i = 0; i < str.length; i++) {
-			pst.setString(i+1, str[i]);
+			pst.setString(i + 1, str[i]);
 			pst.executeUpdate();
 			System.out.println(str[i]);
 			linecount++;
@@ -56,19 +56,28 @@ public class TestInsert {
 		conn.close();
 
 	}
-	
+
 	public void insertTwo(String[] str) throws ClassNotFoundException, SQLException {
 
-		
 		for (int i = 0; i < str.length; i++) {
 			pst.setString(1, str[i]);
-			pst.setString(2, "50");
+			pst.setString(2, str[i]);
 			pst.executeUpdate();
 			System.out.println(str[i]);
 			linecount++;
 		}
 
 		System.out.println("저장을 완료하였습니다. 저장된 단어는 총 " + linecount + "개 입니다");
+
+		pst.close();
+		conn.close();
+
+	}
+
+	public void insertTwoCode(String codeName, String code) throws ClassNotFoundException, SQLException {
+
+		pst.setString(1, codeName);
+		pst.setString(2, code);
 
 		pst.close();
 		conn.close();
@@ -84,10 +93,10 @@ public class TestInsert {
 			String[] sscut = wordLists[i].split("「");
 			System.out.println(wordLists[i]);
 
-			for(int j = 0; j < sscut.length; j++) {
-				
-				pst.setString(j+1, sscut[j]);
-		
+			for (int j = 0; j < sscut.length; j++) {
+
+				pst.setString(j + 1, sscut[j]);
+
 			}
 			pst.executeUpdate();
 
