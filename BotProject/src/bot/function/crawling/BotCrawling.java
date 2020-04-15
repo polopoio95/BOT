@@ -12,7 +12,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 
 import bot.main.db.DBConn;
-import bot.main.db.InsertDB;
+import bot.main.db.DBinsert;
+import bot.main.db.DBselect;
 
 public class BotCrawling {
 
@@ -49,7 +50,7 @@ public class BotCrawling {
 
 		} finally {
 			System.out.println("\n");
-			System.out.println("공부 다 했습니다");
+			System.out.println("크롤링을 끝냈습니다");
 			driver.quit();
 
 		}
@@ -57,10 +58,11 @@ public class BotCrawling {
 	}
 
 	public void crawlingWeb(String[] list, String sql)
+
 			throws InterruptedException, ClassNotFoundException, SQLException {
 		// 셀레니움을 이용해서 해당 페이지의 html를 뽑아온다
 
-		InsertDB dp = new InsertDB(sql);
+		DBinsert dp = new DBinsert(sql);
 		List<String> crawlingword = new ArrayList<String>();
 
 		if (sql.contains("(?)")) {
@@ -142,6 +144,36 @@ public class BotCrawling {
 		} else {
 			System.out.println("DB 명령문을 다시 한 번 확인해주세요");
 		}
+	}
+	
+	private void matchWord() throws InterruptedException, ClassNotFoundException, SQLException {
+		// TODO Auto-generated method stub
+		String sql = "SELECT WORD, ACCURACY FROM NOUN";
+		DBselect ts = new DBselect(sql);
+		String[] wordList = ts.selectWordStorage();
+		//필터된 단어
+		
+		
+		Thread.sleep(1000);
+		// 이 웹사이트상의 구조를 내가 원하는 것으로 정리하는거 (69~72)
+		element = driver.findElement(By.id("articleWrap"));
+		String art = element.getText();
+		System.out.println(art);
+		
+		for(int i = 0; i < wordList.length; i++) {
+			
+			if(art.contains(wordList[i])) {
+				System.out.printf("%s는 담겨져있습니다\n", wordList[i]);
+			
+				
+			} else {
+				System.out.printf("%s는 담겨져있지 않습니다\n", wordList[i]);
+			}
+			
+			
+		}
+		
+		
 	}
 
 }
