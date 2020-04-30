@@ -12,7 +12,7 @@ public class DBinsert {
 	private PreparedStatement pst;
 	private int linecount = 0;
 
-	public void TestInsert(String sql) throws ClassNotFoundException, SQLException {
+	public DBinsert(String sql) throws ClassNotFoundException, SQLException {
 
 		Class.forName("oracle.jdbc.driver.OracleDriver");
 		String url = "jdbc:oracle:thin:@localhost:1521/xepdb1";
@@ -64,7 +64,25 @@ public class DBinsert {
 
 		for (int i = 0; i < str.length; i++) {
 			pst.setString(1, str[i]);
-			pst.setString(2, str[i]);
+			pst.setString(2, "1000");
+			pst.executeUpdate();
+			System.out.println(str[i]);
+			linecount++;
+		}
+
+		System.out.println("저장을 완료하였습니다. 저장된 단어는 총 " + linecount + "개 입니다");
+
+		pst.close();
+		conn.close();
+
+	}
+	
+	public void insertThree(String[] str) throws ClassNotFoundException, SQLException {
+
+		for (int i = 0; i < str.length; i++) {
+			pst.setString(1, str[i]);
+			pst.setString(2, "부사");
+			pst.setString(3, "1000");
 			pst.executeUpdate();
 			System.out.println(str[i]);
 			linecount++;
@@ -77,39 +95,29 @@ public class DBinsert {
 
 	}
 
-	public void insertTwoCode(String codeName, String code) throws ClassNotFoundException, SQLException {
 
-		pst.setString(1, codeName);
-		pst.setString(2, code);
-
-		pst.close();
-		conn.close();
-
-	}
-
-	// INSERT INTO JOSAWORD VALUES(?,?,?)
-	public void insertthree(String[] wordLists) throws ClassNotFoundException, SQLException {
-		System.out.println(wordLists.length);
-
-		for (int i = 0; i < wordLists.length; i++) {
-
-			String[] sscut = wordLists[i].split("「");
-			System.out.println(wordLists[i]);
-
-			for (int j = 0; j < sscut.length; j++) {
-
-				pst.setString(j + 1, sscut[j]);
-
-			}
-			pst.executeUpdate();
-
-		}
-
-		pst.close();
-		conn.close();
-
-		System.out.println("저장되었습니다");
-
-	}
+	/* 국립국어원 크롤링용
+	 * // INSERT INTO JOSAWORD VALUES(?,?,?) public void insertthree(String[]
+	 * wordLists) throws ClassNotFoundException, SQLException {
+	 * System.out.println(wordLists.length);
+	 * 
+	 * for (int i = 0; i < wordLists.length; i++) {
+	 * 
+	 * String[] sscut = wordLists[i].split("「"); System.out.println(wordLists[i]);
+	 * 
+	 * for (int j = 0; j < sscut.length; j++) {
+	 * 
+	 * pst.setString(j + 1, sscut[j]);
+	 * 
+	 * } pst.executeUpdate();
+	 * 
+	 * }
+	 * 
+	 * pst.close(); conn.close();
+	 * 
+	 * System.out.println("저장되었습니다");
+	 * 
+	 * }
+	 */
 
 }

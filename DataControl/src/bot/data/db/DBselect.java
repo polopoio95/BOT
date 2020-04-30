@@ -15,7 +15,7 @@ public class DBselect {
 	private ResultSet rs;
 	private int linecount = 0;
 
-	// 생성자 String selectsql = "SELECT WORD FROM TESTTABLE";
+	// 생성자 String selectsql = "SELECT WORD FROM TABLENAME";
 	public DBselect(String sql) throws ClassNotFoundException, SQLException {
 
 		Class.forName("oracle.jdbc.driver.OracleDriver");
@@ -87,12 +87,12 @@ public class DBselect {
 
 	}
 
-	public String[] selectAccount() throws ClassNotFoundException, SQLException {
+	public String[] selectAccuracy() throws ClassNotFoundException, SQLException {
 		List<String> lists = new ArrayList<String>();
 
 		while (rs.next()) {
 			// WORD 열에서 한글만 파싱해오는것
-			String account = rs.getString("COUNT");
+			String account = rs.getString("ACCURACY");
 
 			linecount++;
 			lists.add(account);

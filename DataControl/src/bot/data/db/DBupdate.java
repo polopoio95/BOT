@@ -19,22 +19,13 @@ public class DBupdate {
 
 	}
 
-	public void update(String[] wordList, String[] accList) throws ClassNotFoundException, SQLException {
+	public void UpPointupdate(String[] list) throws ClassNotFoundException, SQLException {
 
-		
-		for(int i=0; i < wordList.length; i++) {
-		
-			StringBuilder appsql = new StringBuilder();
+		DBupdate update = new DBupdate();
+		String sql = update.makeUpSQL(list);
 
-			appsql.append("UPDATE TEST SET COUNT = '")
-			.append(accList[i])
-			.append("' WHERE WORD = '")
-			.append(wordList[i])
-			.append("'");
-			
-			String sql = appsql.toString();
+		try {
 
-			System.out.println(sql);
 			pst = conn.prepareStatement(sql);
 			System.out.println("DB 연결 완료");
 
@@ -42,19 +33,90 @@ public class DBupdate {
 
 			if (r > 0) {
 				System.out.println("삽입 성공");
-				
+
 			} else {
 				System.out.println("삽입 실패");
 			}
 
-			
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+
+			pst.close();
+			conn.close();
+
 		}
-		
-		
-		pst.close();
-		conn.close();
-		
-		System.out.println("저장을 완료하였습니다");
+
+		System.out.println("정확성 + 저장을 완료하였습니다");
+
+	}
+
+	public void DownPointupdate(String[] list) throws ClassNotFoundException, SQLException {
+
+		DBupdate update = new DBupdate();
+		String sql = update.makeDownSQL(list);
+
+		try {
+
+			pst = conn.prepareStatement(sql);
+			System.out.println("DB 연결 완료");
+
+			int r = pst.executeUpdate(sql);
+
+			if (r > 0) {
+				System.out.println("삽입 성공");
+
+			} else {
+				System.out.println("삽입 실패");
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+		} finally {
+
+			pst.close();
+			conn.close();
+
+		}
+
+		System.out.println("정확성 - 저장을 완료하였습니다");
+
+	}
+
+	private String makeUpSQL(String[] upPoint) {
+
+		StringBuilder appsql = new StringBuilder();
+
+		appsql.append("UPDATE NOUN SET ACCURACY = ACCURACY + 1 ");
+		appsql.append("WHERE WORD = '" + upPoint[0] + "'");
+
+		for (int i = 1; i < upPoint.length; i++) {
+			appsql.append(" OR WORD = '" + upPoint[i] + "'");
+
+		}
+
+		String sql = appsql.toString();
+
+		return sql;
+
+	}
+
+	private String makeDownSQL(String[] downPoint) {
+
+		StringBuilder appsql = new StringBuilder();
+
+		appsql.append("UPDATE NOUN SET ACCURACY = ACCURACY - 1 ");
+		appsql.append("WHERE WORD = '" + downPoint[0] + "'");
+
+		for (int i = 1; i < downPoint.length; i++) {
+			appsql.append(" OR WORD = '" + downPoint[i] + "'");
+
+		}
+
+		String sql = appsql.toString();
+		System.out.println(sql);
+
+		return sql;
 
 	}
 
